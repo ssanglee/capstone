@@ -1,5 +1,5 @@
 <?php
-
+//echo "<script>alert('yina_edit_inc');</script>";
 /*
  +-----------------------------------------------------------------------+
  | program/steps/addressbook/edit.inc                                    |

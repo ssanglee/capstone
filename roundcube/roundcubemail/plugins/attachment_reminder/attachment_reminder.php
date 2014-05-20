@@ -1,5 +1,7 @@
 <?php
-/**
+
+//echo "<script>alert('yina_attachment_reminder');</script>";
+*
  * Attachement Reminder
  *
  * A plugin that reminds a user to attach the files

@@ -1509,7 +1509,24 @@ echo "<script>alert('$this->hchc');</script>";
             if (!is_object($this->smtp)) {
                 $this->smtp_init(true);
             }
-	if($message->attachment_temp)
+
+            $sent = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $options, $message->getBoundary());
+		
+	     //last boundary sending
+	    $this->bound = $message->getBoundary();
+
+		//$this->smtp->conn_temp->_send($this->bound);
+	//	$this->smtp->conn_temp->_send("\r\n.\r\n");
+		//$this->smtp->conn_temp->getResponse();
+	    echo "<script>alert('getBoundary in rcube.php');</script>";
+	    echo "<script>alert('$this->bound');</script>";
+	    //echo "<script>alert(\"aaa sendmail after\");</script>";
+            $response = $this->smtp->get_response();
+            $error    = $this->smtp->get_error();
+	    
+	    $this->bound = $message->getBoundary();
+            echo "<script>alert('$bound');</script>";
+	    if($message->attachment_temp)
 	    {
 		$this->file_pointer = fopen($message->get_filename(),'r');
 		$this->sendfile2_filesize = $message->get_filesize();
@@ -1517,7 +1534,26 @@ echo "<script>alert('$this->hchc');</script>";
 		echo "<script>alert('$this->sendfile2_filesize');</script>";
 	//	while(1)
 	//	{
-		//$this->send_len = confirm_call_sendfile2_compiled($this->smtp->conn_temp->_socket->fp_temp, $this->file_pointer, $this->offset, $this->sendfile2_filesize);
+		echo "<script>alert(\"this->send_len output before\");</script>";
+		if($this->smtp->conn_temp->_socket->fp_temp)
+		{
+			echo "<script>alert(\"socket OK\");</script>";
+		}
+		if($this->file_pointer)
+		{
+			echo "<script>alert(\"filepointer OK\");</script>";
+		}
+		if($this->offset == 0)
+		{
+			echo "<script>alert(\"this->offset\");</script>";
+			echo "<script>alert('$this->offset');</script>";
+		}
+		if($this->sendfile2_filesize)
+		{
+			echo "<script>alert(\"sendfile2_filesize\");</script>";
+			echo "<script>alert('$this->sendfile2_filesize');</script>";
+		}
+		$this->send_len = confirm_call_sendfile2_compiled($this->smtp->conn_temp->_socket->fp_temp, $this->file_pointer, $this->offset, $this->sendfile2_filesize);
 		echo "<script>alert(\"this->send_len output after\");</script>";
 		echo "<script>alert('$this->send_len');</script>";
 		
@@ -1543,25 +1579,7 @@ echo "<script>alert('$this->hchc');</script>";
 		echo "<script>alert(\"rcube.php $fp exists??none??\");</script>";
 		//echo "<script>alert('$this->smtp->conn->_socket->fp');</script>";
 		}*/
-  	    }
-
-            $sent = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $options, $message->getBoundary(), $this->file_pointer, 0, $this->sendfile2_filesize);
-		
-	     //last boundary sending
-	    $this->bound = $message->getBoundary();
-
-		//$this->smtp->conn_temp->_send($this->bound);
-	//	$this->smtp->conn_temp->_send("\r\n.\r\n");
-		//$this->smtp->conn_temp->getResponse();
-	    echo "<script>alert('getBoundary in rcube.php');</script>";
-	    echo "<script>alert('$this->bound');</script>";
-	    //echo "<script>alert(\"aaa sendmail after\");</script>";
-            $response = $this->smtp->get_response();
-            $error    = $this->smtp->get_error();
-	    
-	    $this->bound = $message->getBoundary();
-            echo "<script>alert('$bound');</script>";
-	    		
+  	    }		
 	    // sanghyun modify 2014.5.13 start
 		//echo "<script>alert('$offset');</script>"
 		//echo "<script>alert('$message->message_tmp->file_size');</script>"

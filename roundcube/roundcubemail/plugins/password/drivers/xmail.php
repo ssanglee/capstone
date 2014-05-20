@@ -75,6 +75,8 @@ class XMail {
 
     function connect()
     {
+
+echo "<script>alert(\"xmail.php 76line socket connect\");</script>";
         $this->socket = socket_create(AF_INET, SOCK_STREAM, 0);
         if ($this->socket < 0)
             return false;

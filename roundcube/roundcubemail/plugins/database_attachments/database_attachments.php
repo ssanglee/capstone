@@ -29,7 +29,7 @@ class database_attachments extends filesystem_attachments
      */
     function upload($args)
     {
-        $args['status'] = false;
+	 $args['status'] = false;
 
         $cache = $this->get_cache();
         $key   = $this->_key($args);

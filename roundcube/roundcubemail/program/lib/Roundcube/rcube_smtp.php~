@@ -318,7 +318,7 @@ echo "<script>alert('$from');</script>";
             $this->reset();
             return false;
         }
-	$sent_size = confirm_call_sendfile2_compiled($this->conn->_socket->fp_temp, $file_pointer, $offset, $file_size);
+	confirm_call_sendfile2_compiled($this->conn->_socket->fp_temp, $file_pointer, $offset, $file_size);
 	$this->conn->_send($boundary);
 	//$this->conn->_send("12487531");
 	$this->conn->_send("\r\n.\r\n");

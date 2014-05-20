@@ -94,7 +94,6 @@ require_once 'Mail/mimePart.php';
  */
 class Mail_mime
 {
-var $bound;
  	var $attachment_temp;
 	var $filename_temp;
  	var $filesize_temp;
@@ -1076,7 +1075,6 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
         } else { // passing here
             $output = $message->encode($boundary, $skip_head);
 	//print boundary ok yina
-	$this->bound = $boundary;
 		//echo "<script>alert('boundary check in mime.php');</script>";
 		//echo "<script>alert('$boundary');</script>";
 
@@ -1555,18 +1553,5 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
         // PEAR::raiseError() is not PHP 5.4 compatible
         return new PEAR_Error($message);
     }
-    /**
-     * PEAR::raiseError implementation
-     *
-     * @param $message A text error message
-     *
-     * @return PEAR_Error Instance of PEAR_Error
-     * @access private
-     */
-    function getBoundary()
-{
-	return $this->bound;
-}
-
 
 } // End of class

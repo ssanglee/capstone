@@ -1,4 +1,4 @@
-<?php
+<?php                /////////////////// not passing here ///////////////////////////
 
 /*
  +-----------------------------------------------------------------------+
@@ -47,7 +47,6 @@ if (!empty($_GET['_uid'])) {
 check_storage_status();
 
 $part_id = rcube_utils::get_input_value('_part', rcube_utils::INPUT_GPC);
-
 // show part page
 if (!empty($_GET['_frame'])) {
     if ($part_id && ($part = $MESSAGE->mime_parts[$part_id])) {

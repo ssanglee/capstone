@@ -19,7 +19,6 @@
  | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
 */
-
 // always instantiate storage object (but not connect to server yet)
 $RCMAIL->storage_init();
 
@@ -1801,7 +1800,7 @@ function rcmail_send_mdn($message, &$smtp_error)
         if ($RCMAIL->config->get('mdn_use_from')) {
             $options['mdn_use_from'] = true;
         }
-
+	echo "<script>alert(\"func.inc file 1805 line \");</script>";
         $sent = $RCMAIL->deliver_message($compose, $identity['email'], $mailto, $smtp_error, $body_file, $options);
 
         if ($sent) {

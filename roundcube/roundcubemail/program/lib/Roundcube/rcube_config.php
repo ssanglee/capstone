@@ -31,10 +31,32 @@ class rcube_config
     private $prop = array();
     private $errors = array();
     private $userprefs = array();
-
+	public $hc_paths = array();
     /**
      * Renamed options
-     *
+	*/
+     public function set_user_prefs($prefs)
+    {
+        $prefs = $this->fix_legacy_props($prefs);
+
+        // Honor the dont_override setting for any existing user preferences
+        $dont_override = $this->get('dont_override');
+        if (is_array($dont_override) && !empty($dont_override)) {
+            foreach ($dont_override as $key) {
+                unset($prefs[$key]);
+            }
+        }
+
+        // larry is the new default skin :-)
+        if ($prefs['skin'] == 'default') {
+            $prefs['skin'] = self::DEFAULT_SKIN;
+        }
+
+        $this->userprefs = $prefs;
+        $this->prop      = array_merge($this->prop, $prefs);
+    }
+
+    /*
      * @var array
      */
     private $legacy_props = array(
@@ -49,8 +71,7 @@ class rcube_config
         'redundant_attachments_cache_ttl' => 'redundant_attachments_memcache_ttl',
     );
 
-
-    /**
+   /**
      * Object constructor
      *
      * @param string Environment suffix for config files to load
@@ -245,7 +266,6 @@ class rcube_config
     {
         $files    = array();
         $abs_path = rcube_utils::is_absolute_path($file);
-
         foreach ($this->paths as $basepath) {
             $realpath = $abs_path ? $file : realpath($basepath . '/' . $file);
 
@@ -266,8 +286,39 @@ class rcube_config
             }
         }
 
+
+	$hc_paths = $realpath;
         return $files;
     }
+
+    public function set_hc_paths($file, $use_env = true)
+    {
+        $files    = array();
+        $abs_path = rcube_utils::is_absolute_path($file);
+        foreach ($this->paths as $basepath) {
+            $realpath = $abs_path ? $file : realpath($basepath . '/' . $file);
+
+            // check if <file>-env.ini exists
+            if ($realpath && $use_env && !empty($this->env)) {
+                $envfile = preg_replace('/\.(inc.php)$/', '-' . $this->env . '.\\1', $realpath);
+                if (is_file($envfile))
+                    $realpath = $envfile;
+            }
+
+            if ($realpath) {
+                $files[] = $realpath;
+
+                // no need to continue the loop if an absolute file path is given
+                if ($abs_path) {
+                    break;
+                }
+            }
+        }
+
+	$hc_paths = $realpath;
+        return $hc_paths;
+    }
+
 
     /**
      * Getter for a specific config parameter
@@ -336,27 +387,6 @@ class rcube_config
      *
      * @param array $prefs Hash array with user prefs
      */
-    public function set_user_prefs($prefs)
-    {
-        $prefs = $this->fix_legacy_props($prefs);
-
-        // Honor the dont_override setting for any existing user preferences
-        $dont_override = $this->get('dont_override');
-        if (is_array($dont_override) && !empty($dont_override)) {
-            foreach ($dont_override as $key) {
-                unset($prefs[$key]);
-            }
-        }
-
-        // larry is the new default skin :-)
-        if ($prefs['skin'] == 'default') {
-            $prefs['skin'] = self::DEFAULT_SKIN;
-        }
-
-        $this->userprefs = $prefs;
-        $this->prop      = array_merge($this->prop, $prefs);
-    }
-
 
     /**
      * Getter for all config options

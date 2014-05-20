@@ -90,7 +90,12 @@ class rcube_message
         }
 
         $this->mime = new rcube_mime($this->headers->charset);
-
+	
+	//$print_hc = $this->mime->config->set_hc_paths('$mail_part->filename');
+//$print_hc = rcube::get_instance()->config->set_hc_paths('mimetypes.php');
+//echo "<script>alert('hc kyokyokyo');</script>";
+//echo '<xmp>'.print_r($print_hc, 1).'</xmp>';
+//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($print_hc,1)).'");</script>';
         $this->subject = $this->headers->get('subject');
         list(, $this->sender) = each($this->mime->decode_address_list($this->headers->from, 1));
 

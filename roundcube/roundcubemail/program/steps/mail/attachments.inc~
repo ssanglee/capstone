@@ -178,8 +178,8 @@ if (is_array($_FILES['_attachments']['tmp_name'])) {	//passing here!
         }
     }
 //echo "<script>alert('yina_attachment.inc');</script>";
-//echo '<xmp>'.print_r($attachment, 1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($attachment,1)).'");</script>';
+echo '<xmp>'.print_r($filepath, 1).'</xmp>';
+echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($filepath,1)).'");</script>';
 }
 else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // if filesize exceeds post_max_size then $_FILES array is empty,

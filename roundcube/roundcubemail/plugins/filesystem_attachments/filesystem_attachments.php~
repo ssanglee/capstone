@@ -46,9 +46,9 @@ class filesystem_attachments extends rcube_plugin
     /**
      * Save a newly uploaded attachment
      */
-    function upload($args)//passing here!
+    function upload($args)
     {
-//echo "<script>alert('yina_upload_alert');</script>";
+
         $args['status'] = false;
         $group  = $args['group'];
         $rcmail = rcmail::get_instance();
@@ -57,8 +57,6 @@ class filesystem_attachments extends rcube_plugin
         $temp_dir = $rcmail->config->get('temp_dir');
         $tmpfname = tempnam($temp_dir, 'rcmAttmnt');
 
-//echo '<xmp>'.print_r($temp_dir, 1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($temp_dir,1)).'");</script>';
         if (move_uploaded_file($args['path'], $tmpfname) && file_exists($tmpfname)) {
             $args['id']     = $this->file_id();
             $args['path']   = $tmpfname;
@@ -69,16 +67,16 @@ class filesystem_attachments extends rcube_plugin
             $_SESSION['plugins']['filesystem_attachments'][$group][$args['id']] = $tmpfname;
         }
 //echo "<script>alert(\"ararar\");</script>";
-//echo "<script>alert(\"upload_file_yina\");</script>";
-//echo '<xmp>'.print_r($tmpfname, 1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($tmpfname,1)).'");</script>';
+//echo "<script>alert(\"encoded_headers_part_yn\");</script>";
+echo '<xmp>'.print_r($args['path'], 1).'</xmp>';
+echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($args['path'],1)).'");</script>';
         return $args;
     }
 
     /**
      * Save an attachment from a non-upload source (draft or forward)
      */
-    function save($args) // not passing here
+    function save($args)
     {
         $group = $args['group'];
         $args['status'] = false;
@@ -125,12 +123,7 @@ class filesystem_attachments extends rcube_plugin
     function display($args)
     {
         $args['status'] = file_exists($args['path']);
-
-echo '<xmp>'.print_r($args['path'], 1).'</xmp>';
-echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($args['path'],1)).'");</script>';
-
         return $args;
-
     }
 
     /**
@@ -140,9 +133,6 @@ echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($args['
      */
     function get($args)
     {
-//echo "<script>alert('hc test get function');</script>";
-//echo '<xmp>'.print_r($args, 1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($args,1)).'");</script>';
         return $args;
     }
 

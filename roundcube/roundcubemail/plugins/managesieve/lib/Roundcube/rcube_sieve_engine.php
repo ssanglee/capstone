@@ -1,5 +1,6 @@
 <?php
-
+//not passing here!
+//echo "<script>alert('managesieve!');</script>";
 /**
  * Managesieve (Sieve Filters) Engine
  *

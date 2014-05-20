@@ -1,4 +1,4 @@
-<?php                              ////////////////// not passing here ////////////////////////////
+<?php
 
 /*
  +-----------------------------------------------------------------------+
@@ -38,11 +38,7 @@ if (is_array($_FILES['_file'])) {
             }
 
             // read the first few lines to detect header-like structure
-
-           // $fp = fopen($filepath, 'r');
-//not passing here!
-//echo "<script>alert('hc_fopen');</script>";
-//echo "<script>alert('$filepath');</script>";
+            $fp = fopen($filepath, 'r');
             do {
                 $line = fgets($fp);
             }

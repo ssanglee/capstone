@@ -216,6 +216,8 @@ class HTTPSocket {
         // instance connection
         if ($this->bind_host)
         {
+
+echo "<script>alert(\"directadmin.php socket\");</script>";
             $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
             socket_bind($socket,$this->bind_host);
 

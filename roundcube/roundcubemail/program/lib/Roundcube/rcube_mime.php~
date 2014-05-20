@@ -29,7 +29,7 @@
 class rcube_mime
 {
     private static $default_charset;
-        //$print_hc = $this->mime->config->set_hc_paths('$mail_part->filename');
+
 
     /**
      * Object constructor.
@@ -37,10 +37,6 @@ class rcube_mime
     function __construct($default_charset = null)
     {
         self::$default_charset = $default_charset;
-	//$print_hc = rcube::get_instance()->config->set_hc_paths('mimetypes.php');
-	//echo "<script>alert('hc kyokyokyo');</script>";
-	//echo '<xmp>'.print_r($print_hc, 1).'</xmp>';
-	//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($print_hc,1)).'");</script>';
     }
 
 
@@ -846,8 +842,8 @@ class rcube_mime
                 $mime_types[$mime][] = $ext;
             }
         }
-//not passing here!
-//$print_hc = rcube::get_instance()->config->set_hc_paths('mimetypes.php'); 
+
+$print_hc = rcube::get_instance()->config->set_hc_paths('mimetypes.php') 
 //echo "<script>alert('hc kyokyokyo');</script>";
 //echo '<xmp>'.print_r($print_hc, 1).'</xmp>';
 //echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($print_hc,1)).'");</script>';

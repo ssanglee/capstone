@@ -50,7 +50,7 @@ class Net_Socket extends PEAR
      * @var resource $fp
      */
     var $fp = null;
-
+	var $fp_temp;
     /**
      * Whether the socket is blocking. Defaults to true.
      * @var boolean $blocking
@@ -157,12 +157,17 @@ class Net_Socket extends PEAR
                 $addr = $this->addr . ':' . $this->port;
                 $fp   = stream_socket_client($addr, $errno, $errstr,
                                              $timeout, $flags, $context);
+
+echo "<script>alert(\"Socket.php158line stream_socket_client\");</script>";
             } else {
                 $fp = @$openfunc($this->addr, $this->port, $errno,
                                  $errstr, $timeout, $context);
+echo "<script>alert(\"Socket.php161 openfunc\");</script>";
             }
         } else {
             $fp = @$openfunc($this->addr, $this->port, $errno, $errstr, $timeout);
+		$this->fp_temp = $fp;
+echo "<script>alert(\"Socket.php165 else state openfunc\");</script>";
         }
 
         if (!$fp) {
