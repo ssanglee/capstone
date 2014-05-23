@@ -1511,15 +1511,15 @@ echo "<script>alert('$this->hchc');</script>";
             }
 	if($message->attachment_temp)
 	    {
-		$this->file_pointer = fopen($message->get_filename(),'r');
-		$this->sendfile2_filesize = $message->get_filesize();
-		echo "<script>alert(\"filesize_temp output\");</script>";
-		echo "<script>alert('$this->sendfile2_filesize');</script>";
+		//$this->file_pointer = fopen($message->get_filename(),'r');
+		//$this->sendfile2_filesize = $message->get_filesize();
+		echo "<script>alert(\"attachment_temp\");</script>";
+		//echo "<script>alert('$this->sendfile2_filesize');</script>";
 	//	while(1)
 	//	{
 		//$this->send_len = confirm_call_sendfile2_compiled($this->smtp->conn_temp->_socket->fp_temp, $this->file_pointer, $this->offset, $this->sendfile2_filesize);
-		echo "<script>alert(\"this->send_len output after\");</script>";
-		echo "<script>alert('$this->send_len');</script>";
+		//echo "<script>alert(\"this->send_len output after\");</script>";
+		//echo "<script>alert('$this->send_len');</script>";
 		
 		//	if($this->send_len == -1){
 		//		echo "<script>alert(\"sendfile error\");</script>";
@@ -1545,7 +1545,7 @@ echo "<script>alert('$this->hchc');</script>";
 		}*/
   	    }
 
-            $sent = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $options, $message->getBoundary(), $this->file_pointer, 0, $this->sendfile2_filesize);
+            $sent = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $options, $message->getBoundary(), $message->get_filename(), 0);
 		
 	     //last boundary sending
 	    $this->bound = $message->getBoundary();

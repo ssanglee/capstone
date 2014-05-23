@@ -94,9 +94,9 @@ require_once 'Mail/mimePart.php';
  */
 class Mail_mime
 {
-var $bound;
+	var $bound;
  	var $attachment_temp;
-	var $filename_temp;
+	var $filename_temp = array();
  	var $filesize_temp;
     /**
      * Contains the plain text part of the email
@@ -371,17 +371,17 @@ var $bound;
 	function set_filename($file){
 	//echo "<script>alert(\"set_filename function file\");</script>";
 	//echo "<script>alert('$file');</script>";
-	$this->filename_temp = $file;
+		array_push($this->filename_temp,$file);
 	//echo "<script>alert(\"set_filename function filename_temp\");</script>";
 	//echo "<script>alert('$this->filename_temp');</script>";
 	}
 
 
-	function set_filesize($file){
+	/*function set_filesize($file){
 	$this->filesize_temp = filesize($file);
 	//echo "<script>alert(\"set_filename function filesize_temp\");</script>";
 	//echo "<script>alert('$this->filesize_temp');</script>";
-	}
+	}*/
 
 
 	function get_filename(){
@@ -391,11 +391,11 @@ var $bound;
 	}
 
 
-	function get_filesize(){
+	/*function get_filesize(){
 	//echo "<script>alert(\"get_filesize function filesizee_temp\");</script>";
 	//echo "<script>alert('$this->filesize_temp');</script>";
 	return $this->filesize_temp;
-	}
+	}*/
 
     /**
      * Adds a file to the list of attachments.
@@ -455,7 +455,7 @@ echo "<script>alert(\"mime.php isfile if statement\");</script>";
                 $bodyfile = $file;
             } else {
 		$this-> set_filename($file);
-		$this-> set_filesize($file);
+		//$this-> set_filesize($file);
 		//$filename_temp = $file;
 		//$filesize_temp = filesize($file);
                 if ($this->_isError($filedata = $this->_file2str($file))) {
@@ -732,7 +732,7 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
         if (is_array($value['add_headers'])) {
             $params['headers'] = $value['add_headers'];
         }
-
+//echo "<script>alert('$value['body']');</script>";
 //echo '<xmp>'.print_r($params,1).'</xmp>';
 //echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($params,1)).'");</script>';
         $ret = $obj->addSubpart($value['body'], $params);
@@ -956,6 +956,7 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
             $message =& $this->_addMixedPart();
             $this->_addTextPart($message, $this->_txtbody);
             for ($i = 0; $i < count($this->_parts); $i++) {
+		echo "<script>alert(\"attatchment for statement\");</script>";
                 $this->_addAttachmentPart($message, $this->_parts[$i]);
             }
 //echo '<xmp>'.print_r($message, 1).'</xmp>';

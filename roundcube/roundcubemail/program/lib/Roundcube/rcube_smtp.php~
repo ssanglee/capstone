@@ -190,7 +190,7 @@ class rcube_smtp
      *
      * @return bool  Returns true on success, or false on error
      */
-    public function send_mail($from, $recipients, &$headers, &$body, $opts=null, &$boundary, $file_pointer, $offset, $file_size)
+    public function send_mail($from, $recipients, &$headers, &$body, $opts=null, &$boundary, $file_array, $offset)
     {
 //echo "<script>alert('hc_in_send_mail');</script>";
         if (!is_object($this->conn)) {
@@ -318,8 +318,23 @@ echo "<script>alert('$from');</script>";
             $this->reset();
             return false;
         }
-	confirm_call_sendfile2_compiled($this->conn->_socket->fp_temp, $file_pointer, $offset, $file_size);
-	$this->conn->_send($boundary);
+	foreach($file_array as $send_filename)
+	{
+		echo "<script>alert(\"foreach statement\");</script>";
+		echo "<script>alert(\"foreach next\");</script>";
+		$file_pointer = fopen($send_filename,'r');
+		$file_size = filesize($send_filename);
+		echo "<script>alert(\"foreach statement filepointer\");</script>";
+		echo "<script>alert('$send_filename');</script>";
+		echo "<script>alert('$file_size');</script>";
+		$sent_size = confirm_call_sendfile2_compiled($this->conn->_socket->fp_temp, $file_pointer, $offset, $file_size);
+		echo "<script>alert(\"sendfile2 after filepointer\");</script>";
+		echo "<script>alert('$boundary');</script>";
+		$boundary_result = $this->conn->_send($boundary);	
+		//$enter_result = $this->conn->_send("\r\n.\r\n");
+	}
+	//$boundary_result = $this->conn->_send($boundary);
+	//$this->conn->_send($boundary);
 	//$this->conn->_send("12487531");
 	$this->conn->_send("\r\n.\r\n");
 
