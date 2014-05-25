@@ -29,9 +29,20 @@ class rcube_smtp
 //	private $is_before_sent = false;
     private $conn = null;
     var $conn_temp;
+
+
+    /**
+    * The end-of-line sequence
+    *
+    * @var string
+    * @access private
+    */
+    var $_eol = "\r\n";	
+
     private $response;
     private $error;
 
+	
     // define headers delimiter
     const SMTP_MIME_CRLF = "\r\n";
 
@@ -190,7 +201,7 @@ class rcube_smtp
      *
      * @return bool  Returns true on success, or false on error
      */
-    public function send_mail($from, $recipients, &$headers, &$body, $opts=null, &$boundary, $file_array, $offset)
+    public function send_mail($from, $recipients, &$headers, &$body, $opts=null, &$boundary, $file_array, $offset, &$body_subpart)
     {
 //echo "<script>alert('hc_in_send_mail');</script>";
         if (!is_object($this->conn)) {
@@ -207,7 +218,7 @@ class rcube_smtp
 	echo "<script>alert(\"prepare message headers as string-1\");</script>";
         }
         else if (is_string($headers)) {
-	echo "<script>alert(\"prepare message headers as string-2\");</script>";
+	echo "<script>alert(\"prepare message headers as string-2\");</script>";//ok
             $text_headers = $headers;
 	echo "<script>alert('$text_headers');</script>";
         }
@@ -318,7 +329,34 @@ echo "<script>alert('$from');</script>";
             $this->reset();
             return false;
         }
-	foreach($file_array as $send_filename)
+	
+	$eol =$this->_eol;
+		
+	for ($i = 1; $i < count($body_subpart); $i++) {
+		$encoded = "";
+                $tmp = $body_subpart[$i]->encode();
+                if ($this->_isError($tmp)) {
+                    return $tmp;
+                }
+                foreach ($tmp['headers'] as $key => $value) {
+                    $encoded .= $key . ': ' . $value . $eol;
+                }
+                $encoded .= $eol . $tmp['body'] . $eol;
+
+		//$endcoded_result = $this->conn->data($encoded, $text_headers);
+		$endcoded_result = $this->conn->_send($encoded);
+
+		$file_pointer = fopen($file_array[$i-1],'r');
+		$file_size = filesize($file_array[$i-1]);
+
+		$sent_size = confirm_call_sendfile2_compiled($this->conn->_socket->fp_temp, $file_pointer, $offset, $file_size);
+                $encoded = "";
+		$encoded .= $eol .'--' . $boundary. $eol;
+		$boundary_result = $this->conn->_send($encoded);
+		//$boundary_result = $this->conn->data($encoded, $text_headers);
+		
+           }
+	/*foreach($file_array as $send_filename)
 	{
 		echo "<script>alert(\"foreach statement\");</script>";
 		echo "<script>alert(\"foreach next\");</script>";
@@ -332,7 +370,7 @@ echo "<script>alert('$from');</script>";
 		echo "<script>alert('$boundary');</script>";
 		$boundary_result = $this->conn->_send($boundary);	
 		//$enter_result = $this->conn->_send("\r\n.\r\n");
-	}
+	}*/
 	//$boundary_result = $this->conn->_send($boundary);
 	//$this->conn->_send($boundary);
 	//$this->conn->_send("12487531");
@@ -461,6 +499,23 @@ echo "<script>alert('$from');</script>";
         return array($from, join(self::SMTP_MIME_CRLF, $lines) . self::SMTP_MIME_CRLF);
     }
 
+    /**
+     * PEAR::isError implementation
+     *
+     * @param mixed $data Object
+     *
+     * @return bool True if object is an instance of PEAR_Error
+     * @access private
+     */
+    function _isError($data)
+    {
+        // PEAR::isError() is not PHP 5.4 compatible (see Bug #19473)
+        if (is_object($data) && is_a($data, 'PEAR_Error')) {
+            return true;
+        }
+
+        return false;
+    }
     /**
      * Take a set of recipients and parse them, returning an array of
      * bare addresses (forward paths) that can be passed to sendmail

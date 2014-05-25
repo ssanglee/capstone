@@ -1545,7 +1545,7 @@ echo "<script>alert('$this->hchc');</script>";
 		}*/
   	    }
 
-            $sent = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $options, $message->getBoundary(), $message->get_filename(), 0);
+            $sent = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $options, $message->getBoundary(), $message->get_filename(), 0, $message->get_subpart_mimepart());
 		
 	     //last boundary sending
 	    $this->bound = $message->getBoundary();

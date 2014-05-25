@@ -132,6 +132,14 @@ class Mail_mimePart
     */
     var $_eol = "\r\n";
 
+    /**
+    * get subpart function
+    **/
+    function get_subpart()
+    {
+	return $this->_subparts;
+    }
+
 
     /**
     * Constructor.
@@ -163,6 +171,7 @@ class Mail_mimePart
     *
     * @access public
     */
+
 
 
     function Mail_mimePart($body = '', $params = array())
@@ -332,8 +341,12 @@ echo "<script>alert('$size');</script>";
            $this->_headers['Content-Type'] .= ";$eol boundary=\"$boundary\"";//1. header after boundary print yina
 
             $encoded['body'] = ''; 
-
-            for ($i = 0; $i < count($this->_subparts); $i++) {
+		
+	    $subpart_size = count($this->_subparts);
+	    echo "<script>alert(\"mimepart.php subpartsize\");</script>";
+	    echo "<script>alert('$subpart_size');</script>";
+	  	 //count($this->_subparts)
+            for ($i = 0; $i < 1; $i++) {
 		//2. subpart number check boundary yina
 		//before body part appear, boundary generate
 	
@@ -346,9 +359,10 @@ echo "<script>alert('$size');</script>";
                     $encoded['body'] .= $key . ': ' . $value . $eol;
                 }
                 $encoded['body'] .= $eol . $tmp['body'] . $eol;
+		
             }
 		//3. when all file end work, boundary yina
-            //$encoded['body'] .= '--' . $boundary . '--' . $eol;
+            $encoded['body'] .= '--' . $boundary . $eol;
 //body print yina
 //echo '<xmp>'.print_r($encoded['body'], 1).'</xmp>';
 //echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($encoded['body'],1)).'");</script>';

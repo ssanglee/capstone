@@ -98,6 +98,7 @@ class Mail_mime
  	var $attachment_temp;
 	var $filename_temp = array();
  	var $filesize_temp;
+	var $subpart_temp;
     /**
      * Contains the plain text part of the email
      *
@@ -367,6 +368,10 @@ class Mail_mime
         return true;
     }
 
+	function get_subpart_mimepart()
+	{
+		return $this->$subpart_temp;
+	}
 
 	function set_filename($file){
 	//echo "<script>alert(\"set_filename function file\");</script>";
@@ -936,7 +941,11 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
         $html_images = count($this->_html_images)           ? true : false;
         $html        = strlen($this->_htmlbody)             ? true : false;
         $text        = (!$html && strlen($this->_txtbody))  ? true : false;
-
+	echo "<script>alert(\"attachments print mime.php\");</script>";
+	$attachments_size = count($this->_parts);
+	echo "<script>alert('$attachments_size');</script>";
+	echo "<script>alert('count($this->_parts)');</script>";
+	
 	$this->attachment_temp = $attachments; // sanghyunlee 2014.5.15 modify
 	
         switch (true) {
@@ -1076,6 +1085,7 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
             return null;
         } else { // passing here
             $output = $message->encode($boundary, $skip_head);
+	    $this->subpart_temp = $message->get_subpart();	
 	//print boundary ok yina
 	$this->bound = $boundary;
 		//echo "<script>alert('boundary check in mime.php');</script>";
