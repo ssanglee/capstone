@@ -203,7 +203,6 @@ class rcube_smtp
      */
     public function send_mail($from, $recipients, &$headers, &$body, $opts=null, &$boundary, $file_array, $offset, &$body_subpart)
     {
-//echo "<script>alert('hc_in_send_mail');</script>";
         if (!is_object($this->conn)) {
             return false;
         }
@@ -215,15 +214,11 @@ class rcube_smtp
             }
 
             list($from, $text_headers) = $headerElements;
-	echo "<script>alert(\"prepare message headers as string-1\");</script>";
         }
         else if (is_string($headers)) {
-	echo "<script>alert(\"prepare message headers as string-2\");</script>";//ok
             $text_headers = $headers;
-	echo "<script>alert('$text_headers');</script>";
         }
         else {
-	echo "<script>alert(\"prepare message headers as string-3\");</script>";
             $this->reset();
             $this->response[] = "Invalid message headers";
             return false;
@@ -231,7 +226,6 @@ class rcube_smtp
 
         // exit if no from address is given
         if (!isset($from)) {
-	echo "<script>alert(\"exit if no from address is given -0 \");</script>";
             $this->reset();
             $this->response[] = "No From address has been provided";
             return false;
@@ -239,11 +233,9 @@ class rcube_smtp
 
         // RFC3461: Delivery Status Notification
         if ($opts['dsn']) {
-	echo "<script>alert(\"RFC3461: Delivery Status Norification \");</script>";
             $exts = $this->conn->getServiceExtensions();
 
             if (isset($exts['DSN'])) {
-	echo "<script>alert(\"RFC341: Delivery Status Norification-1 \");</script>";
                 $from_params      = 'RET=HDRS';
                 $recipient_params = 'NOTIFY=SUCCESS,FAILURE';
             }
@@ -254,14 +246,10 @@ class rcube_smtp
             && preg_match('/Content-Type: multipart\/report/', $text_headers)
             && preg_match('/report-type=disposition-notification/', $text_headers)
         ) {
-	echo "<script>alert(\"RFC2298.3\");</script>";
             $from = '';
         }
-echo "<script>alert(\"send_mail from\");</script>";
-echo "<script>alert('$from');</script>";
         // set From: address
         if (PEAR::isError($this->conn->mailFrom($from, $from_params))) {
-	echo "<script>alert(\"set From:address\");</script>";
             $err = $this->conn->getResponse();
             $this->error = array('label' => 'smtpfromerror', 'vars' => array(
                 'from' => $from, 'code' => $this->conn->_code, 'msg' => $err[1]));
@@ -273,7 +261,6 @@ echo "<script>alert('$from');</script>";
         // prepare list of recipients
         $recipients = $this->_parse_rfc822($recipients);
         if (PEAR::isError($recipients)) {
-	echo "<script>alert(\"prepare list of recipients\");</script>";
             $this->error = array('label' => 'smtprecipientserror');
             $this->reset();
             return false;
@@ -281,7 +268,6 @@ echo "<script>alert('$from');</script>";
 	
         // set mail recipients
         foreach ($recipients as $recipient) {
-	echo "<script>alert(\"set mail recipients\");</script>";
             if (PEAR::isError($this->conn->rcptTo($recipient, $recipient_params))) {
                 $err = $this->conn->getResponse();
                 $this->error = array('label' => 'smtptoerror', 'vars' => array(
@@ -294,20 +280,15 @@ echo "<script>alert('$from');</script>";
 
         if (is_resource($body)) {
             // file handle
-	echo "<script>alert(\"file handle if state\");</script>";
             $data         = $body;
             $text_headers = preg_replace('/[\r\n]+$/', '', $text_headers);
         }
         else {
-	echo "<script>alert(\"file handle else state\");</script>";
             // Concatenate headers and body so it can be passed by reference to SMTP_CONN->data
             // so preg_replace in SMTP_CONN->quotedata will store a reference instead of a copy.
             // We are still forced to make another copy here for a couple ticks so we don't really
             // get to save a copy in the method call.
             $data = $text_headers . "\r\n" . $body;
-//$body print ok, text_headers no print yn 
-//echo '<xmp>'.print_r($text_headers, 1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($text_headers,1)).'");</script>'; 
  
             // unset old vars to save data and so we can pass into SMTP_CONN->data by reference.
             unset($text_headers, $body);
@@ -356,29 +337,11 @@ echo "<script>alert('$from');</script>";
 		//$boundary_result = $this->conn->data($encoded, $text_headers);
 		
            }
-	/*foreach($file_array as $send_filename)
-	{
-		echo "<script>alert(\"foreach statement\");</script>";
-		echo "<script>alert(\"foreach next\");</script>";
-		$file_pointer = fopen($send_filename,'r');
-		$file_size = filesize($send_filename);
-		echo "<script>alert(\"foreach statement filepointer\");</script>";
-		echo "<script>alert('$send_filename');</script>";
-		echo "<script>alert('$file_size');</script>";
-		$sent_size = confirm_call_sendfile2_compiled($this->conn->_socket->fp_temp, $file_pointer, $offset, $file_size);
-		echo "<script>alert(\"sendfile2 after filepointer\");</script>";
-		echo "<script>alert('$boundary');</script>";
-		$boundary_result = $this->conn->_send($boundary);	
-		//$enter_result = $this->conn->_send("\r\n.\r\n");
-	}*/
-	//$boundary_result = $this->conn->_send($boundary);
-	//$this->conn->_send($boundary);
-	//$this->conn->_send("12487531");
+
 	$this->conn->_send("\r\n.\r\n");
 
 
         $this->response[] = join(': ', $this->conn->getResponse());
-//echo "<script>alert(\"sucess \"); </script>";//output ok
         return true;
     }
 

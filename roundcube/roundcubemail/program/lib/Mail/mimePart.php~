@@ -176,8 +176,6 @@ class Mail_mimePart
 
     function Mail_mimePart($body = '', $params = array())
     {
-//echo "<script>alert('hc_Mail_mimePart');</script>"; 
-//echo "<script>alert('$body');</script>"; // $body's value is null & string of body's text
         if (!empty($params['eol'])) {
             $this->_eol = $params['eol'];
         } else if (defined('MAIL_MIMEPART_CRLF')) { // backward-copat.
@@ -264,15 +262,9 @@ class Mail_mimePart
 
             // add attachment size
             $size = $this->_body_file ? filesize($this->_body_file) : strlen($body);
-echo "<script>alert(\"_body_file output\");</script>";
 
 $body_file_output = filesize($this->_body_file);
-echo "<script>alert('$body_file_output');</script>";
-echo "<script>alert(\"body output\");</script>";
 $body_output = strlen($body);
-echo "<script>alert('$body_output');</script>";
-echo "<script>alert(\"size output\");</script>";
-echo "<script>alert('$size');</script>";
             
 
             if ($size) {
@@ -312,9 +304,6 @@ echo "<script>alert('$size');</script>";
         $this->_encoded  = array();
         $this->_headers  = $headers;
         $this->_body     = $body;
-//echo "<script>alert(\"hc_print params\");</script>"; 
-//echo '<xmp>'.print_r($encoded['params'], 1).'</xmp>';   // not printing 
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($encoded['params'],1)).'");</script>';
     }
 
     /**
@@ -333,19 +322,12 @@ echo "<script>alert('$size');</script>";
         $encoded =& $this->_encoded;
         if (count($this->_subparts)) { //passing here! yina
             $boundary = $boundary ? $boundary : '=_' . md5(rand() . microtime());
-//$bound = $boundary;
-//echo "<script>alert('encode_boundary in mimePart.php');</script>";
-//echo "<script>alert('$boundary');</script>";
             $eol = $this->_eol;
 		//header after print boundary
            $this->_headers['Content-Type'] .= ";$eol boundary=\"$boundary\"";//1. header after boundary print yina
 
             $encoded['body'] = ''; 
-		
-	    $subpart_size = count($this->_subparts);
-	    echo "<script>alert(\"mimepart.php subpartsize\");</script>";
-	    echo "<script>alert('$subpart_size');</script>";
-	  	 //count($this->_subparts)
+	  
             for ($i = 0; $i < 1; $i++) {
 		//2. subpart number check boundary yina
 		//before body part appear, boundary generate
@@ -363,12 +345,8 @@ echo "<script>alert('$size');</script>";
             }
 		//3. when all file end work, boundary yina
             $encoded['body'] .= '--' . $boundary . $eol;
-//body print yina
-//echo '<xmp>'.print_r($encoded['body'], 1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($encoded['body'],1)).'");</script>';
 
         } else if ($this->_body) { //passing here
-//echo "<script>alert('$this->_body');</script>";
            $encoded['body'] = $this->_getEncodedData($this->_body, $this->_encoding);
        } else if ($this->_body_file) { //not passing here
             // Temporarily reset magic_quotes_runtime for file reads and writes
@@ -390,24 +368,11 @@ echo "<script>alert('$size');</script>";
 
         // Add headers to $encoded
         $encoded['headers'] =& $this->_headers;
-//encoded['headers'] print ok yn
-//echo "<script>alert(\"encoded_headers_part_yn\");</script>";
-//echo '<xmp>'.print_r($encoded['headers'], 1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($encoded['headers'],1)).'");</script>';
 
-
-//encoded['body'] print ok yn
-//echo "<script>alert(\"encoded_body_part_yn\");</script>";
-//echo '<xmp>'.print_r($encoded['body'], 1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($encoded['body'],1)).'");</script>';
 
         return $encoded;
     }
-//insert for boundary by yina
-//function getBoundary() 
-//{
-//	return $boundary;
-//}
+
 
 
     /**
@@ -463,8 +428,7 @@ echo "<script>alert('$size');</script>";
      */
     function _encodePartToFile($fh, $boundary=null, $skip_head=false) // not passing here
     {
-// print no
-//echo "<script>alert(\"encodeparttofile\");</script>";
+
         $eol = $this->_eol;
 
         if (count($this->_subparts)) {
@@ -546,7 +510,6 @@ echo "<script>alert('$size');</script>";
             break;
 
         case 'base64':
-	//echo "<script>alert(\"base64\");</script>";
      //     return rtrim(chunk_split(base64_encode($data), 76, $this->_eol));
             break;
 
@@ -575,10 +538,7 @@ echo "<script>alert('$size');</script>";
             $err = $this->_raiseError('Unable to read file: ' . $filename);
             return $err;
         }
-        if (is_readable($filename)) 
-echo "<script>alert(\"_getEncodedDataFromFile filename OK\");</script>";
-	else
-echo "<script>alert(\"_getEncodedDataFromFile filename FALSE\");</script>";
+    
 
         if (!($fd = fopen($filename, 'rb'))) {
             $err = $this->_raiseError('Could not open file: ' . $filename);

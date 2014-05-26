@@ -370,37 +370,17 @@ class Mail_mime
 
 	function get_subpart_mimepart()
 	{
-		return $this->$subpart_temp;
+		return $this->subpart_temp;
 	}
 
 	function set_filename($file){
-	//echo "<script>alert(\"set_filename function file\");</script>";
-	//echo "<script>alert('$file');</script>";
 		array_push($this->filename_temp,$file);
-	//echo "<script>alert(\"set_filename function filename_temp\");</script>";
-	//echo "<script>alert('$this->filename_temp');</script>";
 	}
 
-
-	/*function set_filesize($file){
-	$this->filesize_temp = filesize($file);
-	//echo "<script>alert(\"set_filename function filesize_temp\");</script>";
-	//echo "<script>alert('$this->filesize_temp');</script>";
-	}*/
-
-
 	function get_filename(){
-	//echo "<script>alert(\"get_filename function filename_temp\");</script>";
-	//echo "<script>alert('$this->filename_temp');</script>";
 	return $this->filename_temp;
 	}
 
-
-	/*function get_filesize(){
-	//echo "<script>alert(\"get_filesize function filesizee_temp\");</script>";
-	//echo "<script>alert('$this->filesize_temp');</script>";
-	return $this->filesize_temp;
-	}*/
 
     /**
      * Adds a file to the list of attachments.
@@ -453,18 +433,14 @@ class Mail_mime
         $bodyfile = null;
 
         if ($isfile) {
-echo "<script>alert(\"mime.php isfile if statement\");</script>";
             // Don't load file into memory
             if ($this->_build_params['delay_file_io']) {
                 $filedata = null;
                 $bodyfile = $file;
             } else {
 		$this-> set_filename($file);
-		//$this-> set_filesize($file);
-		//$filename_temp = $file;
-		//$filesize_temp = filesize($file);
+		
                 if ($this->_isError($filedata = $this->_file2str($file))) {
-echo "<script>alert(\"mime.php is file atter else after if statement\");</script>";
                     return $filedata;
                 }
             }
@@ -595,9 +571,6 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
      */
     function &_addMixedPart()
     {
-//echo "<script>alert('hc_in_addMixedPart');</script>";
-//echo '<xmp>'.print_r($params,1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($params,1)).'");</script>';
 
         $params['content_type'] = 'multipart/mixed';
         $params['eol']          = $this->_build_params['eol'];
@@ -700,9 +673,6 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
      */
     function &_addAttachmentPart(&$obj, $value)
     {
-
-//print ok!
-//echo "<script>alert('addattachmentPart_yina');</script>";
         $params['eol']          = $this->_build_params['eol'];
         $params['filename']     = $value['name'];
         $params['encoding']     = $value['encoding'];
@@ -737,9 +707,6 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
         if (is_array($value['add_headers'])) {
             $params['headers'] = $value['add_headers'];
         }
-//echo "<script>alert('$value['body']');</script>";
-//echo '<xmp>'.print_r($params,1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($params,1)).'");</script>';
         $ret = $obj->addSubpart($value['body'], $params);
         return $ret;
     }
@@ -770,9 +737,6 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
         }
 
         $body = $this->get($params);
-//print ok y
-//echo '<xmp>'.print_r($body,1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($body,1)).'");</script>';
         if ($this->_isError($body)) {
             return $body;
         }
@@ -894,7 +858,6 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
      */
     function get($params = null, $filename = null, $skip_head = false)
     {
-//echo "<script>alert('hc_get');</script>";
         if (isset($params)) {
             while (list($key, $value) = each($params)) {
                 $this->_build_params[$key] = $value;
@@ -941,10 +904,7 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
         $html_images = count($this->_html_images)           ? true : false;
         $html        = strlen($this->_htmlbody)             ? true : false;
         $text        = (!$html && strlen($this->_txtbody))  ? true : false;
-	echo "<script>alert(\"attachments print mime.php\");</script>";
 	$attachments_size = count($this->_parts);
-	echo "<script>alert('$attachments_size');</script>";
-	echo "<script>alert('count($this->_parts)');</script>";
 	
 	$this->attachment_temp = $attachments; // sanghyunlee 2014.5.15 modify
 	
@@ -961,15 +921,11 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
             break;
 
         case $text && $attachments:
-//echo "<script>alert(\"mime.php 900 line $text && $attachments\");</script>";
             $message =& $this->_addMixedPart();
             $this->_addTextPart($message, $this->_txtbody);
             for ($i = 0; $i < count($this->_parts); $i++) {
-		echo "<script>alert(\"attatchment for statement\");</script>";
                 $this->_addAttachmentPart($message, $this->_parts[$i]);
             }
-//echo '<xmp>'.print_r($message, 1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($message,1)).'");</script>';
 
             break;
 
@@ -1088,8 +1044,6 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
 	    $this->subpart_temp = $message->get_subpart();	
 	//print boundary ok yina
 	$this->bound = $boundary;
-		//echo "<script>alert('boundary check in mime.php');</script>";
-		//echo "<script>alert('$boundary');</script>";
 
             if ($this->_isError($output)) {
                 return $output;
@@ -1362,12 +1316,10 @@ echo "<script>alert(\"mime.php is file atter else after if statement\");</script
                     );
                 }
             } else {
-//echo "<script>alert(\"aaaaaaaa\");</script>"; //pass ok
                 $input[$hdr_name] = $this->encodeHeader(
                     $hdr_name, $hdr_value,
                     $build_params['head_charset'], $build_params['head_encoding']
                 );
-//echo "<script>alert(\"input\");</script>"; //pass ok
             }
         }
 

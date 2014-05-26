@@ -1435,7 +1435,6 @@ class rcube
      */
     public function deliver_message(&$message, $from, $mailto, &$error, &$body_file = null, $options = null)
     {
-//echo "<script>alert(\"deliver_message_print_yn\");</script>";
   
         $plugin = $this->plugins->exec_hook('message_before_send', array(
             'message' => $message,
@@ -1453,9 +1452,6 @@ class rcube
         $options = $plugin['options'];
         $message = $plugin['message'];
         $headers = $message->headers();
-echo "<script>alert('$from');</script>";//from sucess
-echo "<script>alert('$mailto');</script>";//mailto sucess
-echo "<script>alert('$message->headers()');</script>";
 
         // send thru SMTP server using custom SMTP library
         if ($this->config->get('smtp_server')) {
@@ -1472,15 +1468,12 @@ echo "<script>alert('$message->headers()');</script>";
             // clean Bcc from header for recipients
             $send_headers = $headers;
 
-echo "<script>alert('$send_headers');</script>"; // output 'Array'
             unset($send_headers['Bcc']);
             // here too, it because txtHeaders() below use $message->_headers not only $send_headers
             unset($message->_headers['Bcc']);
 
             $smtp_headers = $message->txtHeaders($send_headers, true);
 //smtp_headers 
-echo "<script>alert('$smtp_headers');</script>"; // output x
-echo "<script>alert(\"smtp headers after\");</script>";
             if ($message->getParam('delay_file_io')) { // not passing here
                 // use common temp dir
                 $temp_dir = $this->config->get('temp_dir');
@@ -1492,81 +1485,26 @@ echo "<script>alert(\"smtp headers after\");</script>";
                         TRUE, FALSE);
                     return false;
                 }
-echo "<script>alert(\"sh rcube.php fopen part\");</script>";
                 $msg_body = fopen($body_file, 'r');
             }
             else {	// passing here
                 $msg_body = $message->get(); // get in the get() method // get body!!!
-$this->hchc = $message->getBoundary();
-echo "<script>alert('getBoundary in rcube.php');</script>";
-echo "<script>alert('$this->hchc');</script>";
-//echo "<script>alert('hc__call_get function');</script>";
-//echo '<xmp>'.print_r($msg_body, 1).'</xmp>';
-//echo '<script>alert("'.str_replace(array("\r\n","\r","\n"),'\\n',print_r($msg_body,1)).'");</script>';
             }
 
             // send message
             if (!is_object($this->smtp)) {
                 $this->smtp_init(true);
             }
-	if($message->attachment_temp)
-	    {
-		//$this->file_pointer = fopen($message->get_filename(),'r');
-		//$this->sendfile2_filesize = $message->get_filesize();
-		echo "<script>alert(\"attachment_temp\");</script>";
-		//echo "<script>alert('$this->sendfile2_filesize');</script>";
-	//	while(1)
-	//	{
-		//$this->send_len = confirm_call_sendfile2_compiled($this->smtp->conn_temp->_socket->fp_temp, $this->file_pointer, $this->offset, $this->sendfile2_filesize);
-		//echo "<script>alert(\"this->send_len output after\");</script>";
-		//echo "<script>alert('$this->send_len');</script>";
-		
-		//	if($this->send_len == -1){
-		//		echo "<script>alert(\"sendfile error\");</script>";
-		//		break;
-		//	}	
-		//	else if($this->send_len < $this->sendfile2_filesize){
-		//		$this->send_len += $this->send_len;
-		//		$this->sendfile2_filesize -= $this->send_len;
-		//	}
-		//	else	
-		//		break;
-	//	}
-		/*
-		echo "<script>alert(\"filename_temp output\");</script>";
-		$filename_temp = $message->get_filename();
-		echo "<script>alert('$filename_temp');</script>";
-		echo "<script>alert(\"filesize_temp output\");</script>";
-		$filesize_temp = $message->get_filesize();
-		echo "<script>alert('$filesize_temp');</script>";
-		if($this->smtp->conn_temp->_socket->fp_temp){
-		echo "<script>alert(\"rcube.php $fp exists??none??\");</script>";
-		//echo "<script>alert('$this->smtp->conn->_socket->fp');</script>";
-		}*/
-  	    }
 
             $sent = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $options, $message->getBoundary(), $message->get_filename(), 0, $message->get_subpart_mimepart());
 		
 	     //last boundary sending
 	    $this->bound = $message->getBoundary();
 
-		//$this->smtp->conn_temp->_send($this->bound);
-	//	$this->smtp->conn_temp->_send("\r\n.\r\n");
-		//$this->smtp->conn_temp->getResponse();
-	    echo "<script>alert('getBoundary in rcube.php');</script>";
-	    echo "<script>alert('$this->bound');</script>";
-	    //echo "<script>alert(\"aaa sendmail after\");</script>";
             $response = $this->smtp->get_response();
             $error    = $this->smtp->get_error();
 	    
 	    $this->bound = $message->getBoundary();
-            echo "<script>alert('$bound');</script>";
-	    		
-	    // sanghyun modify 2014.5.13 start
-		//echo "<script>alert('$offset');</script>"
-		//echo "<script>alert('$message->message_tmp->file_size');</script>"
-	    /*$msg_file = fopen($message->message_tmp->_body_file, 'r');
-	    $sendfile_len = confirm_call_sendfile2_compiled($this->smtp->conn->_socket->fp,$msg_file,$offset,$message->message_tmp->file_size); */
 
             // log error
             if (!$sent) { // not passing here
@@ -1574,15 +1512,9 @@ echo "<script>alert('$this->hchc');</script>";
                     'line' => __LINE__, 'file' => __FILE__,
                     'message' => "SMTP error: ".join("\n", $response)), TRUE, FALSE);
             }
-		echo "<script>alert(\"sent bounary before\");</script>";
-echo "<script>alert('$this->bound');</script>";
-        //$sent = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body,$options);
-echo "<script>alert(\"sent bounary after\");</script>";
+
 
 	
-	//$sent = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $options);
-	//echo "<script>alert(\"echo sentaa\");</script>";
-	//echo "<script>alert('$sentaa');</script>";
         }
         // send mail using PHP's mail() function
         else { // not passing here

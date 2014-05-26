@@ -181,7 +181,6 @@ class Net_SMTP
         }
         $this->pipelining = $pipelining;
 
-echo "<script>alert(\"SMTP.php 184Line \");</script>";
 
         $this->_socket = new Net_Socket();
         $this->_socket_options = $socket_options;
@@ -935,32 +934,30 @@ _send($data)
     function mailFrom($sender, $params = null)
     {
         $args = "FROM:<$sender>";
-        echo "<script>alert(\"mail from-1\");</script>";
-    echo "<script>alert('$from');</script>";
         /* Support the deprecated array form of $params. */
         if (is_array($params) && isset($params['verp'])) {
             /* XVERP */
-            echo "<script>alert(\"mail from-2\");</script>";
+           
             if ($params['verp'] === true) {
                 $args .= ' XVERP';
-                echo "<script>alert(\"mail from-3\");</script>";
+            
 
             /* XVERP=something */
             } elseif (trim($params['verp'])) {
-                echo "<script>alert(\"mail from-4\");</script>";
+               
                 $args .= ' XVERP=' . $params['verp'];
             }
         } elseif (is_string($params) && !empty($params)) {
-            echo "<script>alert(\"mail from-5\");</script>";
+            
             $args .= ' ' . $params;
         }
 
         if (PEAR::isError($error = $this->_put('MAIL', $args))) {
-            echo "<script>alert(\"mail from-6\");</script>";
+            
             return $error;
         }
         if (PEAR::isError($error = $this->_parseResponse(250, $this->pipelining))) {
-            echo "<script>alert(\"mail from-7\");</script>";
+            
             return $error;
         }
 
@@ -1089,7 +1086,7 @@ _send($data)
             while (strlen($line = fread($data, 8192)) > 0) {
                 /* If the last character is an newline, we need to grab the
                  * next character to check to see if it is a period. */
-                echo "<script>alert(\"data send part\");</script>";
+                
                 while (!feof($data)) {
                     $char = fread($data, 1);
                     $line .= $char;
