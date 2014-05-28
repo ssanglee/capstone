@@ -166,7 +166,7 @@ class Net_Socket extends PEAR
             }
         } else {
             $fp = @$openfunc($this->addr, $this->port, $errno, $errstr, $timeout);
-			$this->fp_temp = $fp;
+		$this->fp_temp = $fp;
 
         }
 

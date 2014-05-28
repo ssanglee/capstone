@@ -177,7 +177,16 @@ class rcube
 
         return $this->db;
     }
-
+    
+     /**
+     * Get the deliver_message total time
+     */
+     
+     public function get_time()
+     {
+	list($usec, $sec) = explode(" ", microtime());
+	return ((float)$usec + (float)$sec);
+     }
 
     /**
      * Get global handle for memcache access
@@ -1435,6 +1444,7 @@ class rcube
      */
     public function deliver_message(&$message, $from, $mailto, &$error, &$body_file = null, $options = null)
     {
+	$start = $this->get_time();
   
         $plugin = $this->plugins->exec_hook('message_before_send', array(
             'message' => $message,
@@ -1592,6 +1602,10 @@ class rcube
 
         $message->_headers = array();
         $message->headers($headers);
+	$end = $this->get_time();
+	$time = $end - $start;
+	echo "<script>alert('$time');</script>";
+
         return $sent; // $sent value is 1
     }
 

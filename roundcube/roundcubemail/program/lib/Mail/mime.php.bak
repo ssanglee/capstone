@@ -903,7 +903,7 @@ class Mail_mime
         $html_images = count($this->_html_images)           ? true : false;
         $html        = strlen($this->_htmlbody)             ? true : false;
         $text        = (!$html && strlen($this->_txtbody))  ? true : false;
-		$attachments_size = count($this->_parts);
+	$attachments_size = count($this->_parts);
 	
 	$this->attachment_temp = $attachments; // sanghyunlee 2014.5.15 modify
 	

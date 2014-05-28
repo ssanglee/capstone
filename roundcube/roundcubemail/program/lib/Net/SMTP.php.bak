@@ -446,8 +446,7 @@ _send($data)
         $this->_greeting = null;
         $result = $this->_socket->connect($this->host, $this->port,
                                           $persistent, $timeout,
-                
-		$this->_socket_options);
+                                          $this->_socket_options);
         if (PEAR::isError($result)) {
             return PEAR::raiseError('Failed to connect socket: ' .
                                     $result->getMessage());

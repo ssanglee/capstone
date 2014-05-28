@@ -329,8 +329,10 @@ $body_output = strlen($body);
             $encoded['body'] = ''; 
 	  
             for ($i = 0; $i < 1; $i++) {
-
-				$encoded['body'] .= '--' . $boundary . $eol;
+		//2. subpart number check boundary yina
+		//before body part appear, boundary generate
+	
+		$encoded['body'] .= '--' . $boundary . $eol;
                 $tmp = $this->_subparts[$i]->encode();
                 if ($this->_isError($tmp)) {
                     return $tmp;
@@ -341,7 +343,7 @@ $body_output = strlen($body);
                 $encoded['body'] .= $eol . $tmp['body'] . $eol;
 		
             }
-
+		//3. when all file end work, boundary yina
             $encoded['body'] .= '--' . $boundary . $eol;
 
         } else if ($this->_body) { //passing here
