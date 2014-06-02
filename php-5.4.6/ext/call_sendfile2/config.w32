@@ -1,0 +1,13 @@
+// $Id$
+// vim:ft=javascript
+
+// If your extension references something external, use ARG_WITH
+// ARG_WITH("call_sendfile2", "for call_sendfile2 support", "no");
+
+// Otherwise, use ARG_ENABLE
+// ARG_ENABLE("call_sendfile2", "enable call_sendfile2 support", "no");
+
+if (PHP_CALL_SENDFILE2 != "no") {
+	EXTENSION("call_sendfile2", "call_sendfile2.c");
+}
+
